@@ -8,7 +8,7 @@ class inputNode:
 
     def __init__(self, value, vertical):
         self.alpha = ALPHA
-        self.weights = np.array([1,2,3,4,5])
+        self.weights = np.array([0.5,0.5,0.5,0.5,0.5])
         self.value = value
         self.vertical = vertical
         self.outputs = self.value * self.weights
@@ -21,7 +21,7 @@ class Node:
 
     def __init__(self, prev, vertical):
         self.alpha = ALPHA
-        self.weights = np.array([1,2,3])
+        self.weights = np.array([0.5,0.5,0.5,0.5,0.5])
         self.prev = prev
         self.vertical = vertical
         self.sigmoid_activation_function()
@@ -41,15 +41,32 @@ class Node:
         self.outputs = self.value * self.weights
         print(f"This is the output of this node {self.value}")
     
+    def partial_derivative(self):
+        return self.value * (1 - self.value)
+    
+    def delta(self, target):
+        return (target - self.value) * self.partial_derivative()
+    
+
+    
     
     
 
-node10 = inputNode(7, 0)
-node21 = Node([node10], 0)
-node22 = Node([node10],1)
-node23 = Node([node10],2)
-node24 = Node([node10],3)
-node25 = Node([node10],4)
-node31 = Node([node21,node22,node23,node24,node25],0)
+node11 = inputNode(0.3, 0)
+node21 = Node([node11], 0)
+node22 = Node([node11],1)
+node23 = Node([node11],2)
+node24 = Node([node11],3)
+node25 = Node([node11],4)
+node2 = [node21,node22,node23,node24,node25]
+node31 = Node(node2,0)
+node32 = Node(node2,1)
+node33 = Node(node2,2)
+node34 = Node(node2,3)
+node35 = Node(node2,4)
+node3 = [node31,node32,node33,node34,node35]
+node41 = Node(node3,0)
 
-print(node31.value)
+nodes = [node11] + node2 + node3 + [node41]
+
+
