@@ -1,11 +1,11 @@
 # Let's try the same XOR problem. But this time using Matrices
 # I will still use sigmoid activation function
-
+from logger import save_results
 import numpy as np
 
 END_LAYER = 2
-ALPHA = 1
-ITERATIONS = 5000
+ALPHA = 2
+ITERATIONS = 2000
 
 inputs = np.array([[[0,0]],[[0,1]],[[1,0]],[[1,1]]])
 outputs = [0,1,1,0]
@@ -84,7 +84,7 @@ def main(i):
     forwardProp(1)
 
     error = output - values[END_LAYER]
-    print(error[0][0]**2, f"error {i}")
+    # print(error[0][0]**2, f"error {i}")
     backProp0(1)
     backProp(0)
     gradientDescent(0)
@@ -94,3 +94,27 @@ def main(i):
 for i in range(ITERATIONS):
     # print(i, "i")
     main(i)
+
+print("done", ALPHA)
+
+#Now i just save these errors    
+
+errors = []
+
+for i in range(4):
+    values[0] = inputs[i]
+
+    forwardProp(0)
+    forwardProp(1)
+
+    error = outputs[i] - values[END_LAYER]
+
+    errors.append(error[0][0])
+
+
+save_results(
+    errors,
+    ITERATIONS,
+    ALPHA
+)
+
