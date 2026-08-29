@@ -7,13 +7,13 @@ import os
 OUTPUT_FILE = "CircleBoundary_GD_base.csv"
 
 
-def save_results(errors, iterations, learning_rate):
+def save_results(errors, iterations, learning_rate, hidden_neurons):
     """
-    Append the results of one training run to outputs.csv.
+    Append the results of one training run to Output FIle.
 
     errors:
-        List containing the 4 XOR errors in this order:
-        [00, 01, 10, 11]
+        Now this has 8 test inputs, for the circle one
+        The final four are border cases, yum
 
     iterations:
         Number of training iterations.
@@ -22,8 +22,8 @@ def save_results(errors, iterations, learning_rate):
         Learning rate used for training.
     """
 
-    if len(errors) != 4:
-        raise ValueError("errors must contain exactly 4 XOR errors.")
+    if len(errors) != 8:
+        raise ValueError("errors must contain exactly 8 test errors.")
 
     mean_absolute_error = sum(abs(error) for error in errors) / len(errors)
 
@@ -37,11 +37,16 @@ def save_results(errors, iterations, learning_rate):
             writer.writerow([
                 "error_00",
                 "error_01",
-                "error_10",
-                "error_11",
+                "error_02",
+                "error_03",
+                "error_04",
+                "error_05",
+                "error_06",
+                "error_07",
                 "mean_absolute_error",
                 "iterations",
-                "learning_rate"
+                "learning_rate",
+                "hidden_neurons"
             ])
 
         # Append one row for this training run
@@ -50,8 +55,13 @@ def save_results(errors, iterations, learning_rate):
             errors[1],
             errors[2],
             errors[3],
+            errors[4],
+            errors[5],
+            errors[6],
+            errors[7],
             mean_absolute_error,
             iterations,
-            learning_rate
+            learning_rate,
+            hidden_neurons
         ])
 

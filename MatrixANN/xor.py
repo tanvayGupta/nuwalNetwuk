@@ -2,10 +2,12 @@
 # I will still use sigmoid activation function
 from logger import save_results
 import numpy as np
+import time
+start = time.time()
 
 END_LAYER = 2
-ALPHA = 2
-ITERATIONS = 2000
+ALPHA = 0.08
+ITERATIONS = 20000
 
 inputs = np.array([[[0,0]],[[0,1]],[[1,0]],[[1,1]]])
 outputs = [0,1,1,0]
@@ -22,8 +24,8 @@ values[1] = np.ones((1, 3))
 values[2] = np.ones((1, 1))
 
 weights = np.empty(2,dtype=object)
-weights[0] = np.random.randn(2,3)
-weights[1] = np.random.randn(3,1)
+weights[0] = np.random.rand(2,3)
+weights[1] = np.random.rand(3,1)
 
 wgradients = np.empty(2,dtype=object)
 wgradients[0] = np.ones((2,3))
@@ -36,8 +38,8 @@ bgradients[0] = np.ones((1,3))
 bgradients[1] = np.ones((1,1))
 
 bias = np.empty(2,dtype=object)
-bias[0] = np.random.randn(1, 3)
-bias[1] = np.random.randn(1, 1) #three biases, one for each neuron, one bias for last neuron
+bias[0] = np.random.rand(1, 3)
+bias[1] = np.random.rand(1, 1) #three biases, one for each neuron, one bias for last neuron
 
 def sigmoidActivation(x):
     return (1/(1+np.exp(-x))) #Literally Sigmoid Function
@@ -95,7 +97,9 @@ for i in range(ITERATIONS):
     # print(i, "i")
     main(i)
 
+end = time.time()
 print("done", ALPHA)
+print("Runtime:", end - start, "seconds")
 
 #Now i just save these errors    
 
