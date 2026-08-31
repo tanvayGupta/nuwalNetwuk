@@ -83,3 +83,43 @@ It went 17.23% this time
 
 SO I think 10 neurons could break 15%, why is it taking me 16?
 I'm not sure, but I will look into it later.
+
+# MORE?!?!?!....
+Now I will aggresively test with layers. 50k iterations Alpha near 0.1. The only thing changing is neurons
+2,4,8,12,16,20,24,30
+
+## Oh my God, 30 NEURONS!!!. Ya
+But then I did 50, 75, 100
+
+# MOREEE!!!!
+Sure I then did 200, 250, 300, 350, 400, 450, 500...
+
+## MORE?
+Sure went to 1k
+
+## more..?
+Mhmm 1250, 1500
+
+## hmmmmmm, thats enough
+Nope more
+Went to 2000
+
+### ohh, alright, fine... So thats it right?
+Oo, then 3k, 4k and now 5000
+
+But I'll stop for now... because the performance isnt improving. like at all. infact MAE is stagnant at 0.625 and 0.375. Which is funny because thats 5/8 and 3/8ths roughly. And I have 8 test cases,so yk...
+
+Could be a fluke, but at 900 neurons i got 0.127, roughly 1/8 MAE, so the model had better accuracy
+
+Kudos to the reader to going through so much yap
+frankly this is kind of my journal
+"Dear Diary" ahh
+
+# NEXT PLEASE
+So to solve this I will now get a random test case sequence seeded. It will have 100 data points, so tracking the errors individually would be impossible. I'll just use MAE, right
+
+open v5.csv please :D
+
+
+
+

@@ -10,14 +10,15 @@ import numpy as np
 import time
 start = time.time()
 
-END_LAYER = 2
+END_LAYER = 3
 ALPHA = 0.1
 ITERATIONS = 50000
 
 INPUT_LAYER_NEURONS = 2
-HIDDEN_LAYER_1_NEURONS = 12
+HIDDEN_LAYER_1_NEURONS = 4
+HIDDEN_LAYER_2_NEURONS = 4
 OUTPUT_LAYER_NEURONS = 1
-TOTAL_HIDDEN_LAYERS = 2 # treat the output layer as a hidden layer
+TOTAL_HIDDEN_LAYERS = 3 # treat the output layer as a hidden layer
 inputs = (np.random.rand(1,INPUT_LAYER_NEURONS) * 1.7)
 error = 0
 
@@ -30,11 +31,13 @@ values = np.empty(TOTAL_HIDDEN_LAYERS+1,dtype=object)
 
 values[0] = inputs
 values[1] = np.ones((1, HIDDEN_LAYER_1_NEURONS))
-values[2] = np.ones((1, OUTPUT_LAYER_NEURONS))
+values[2] = np.ones((1, HIDDEN_LAYER_2_NEURONS))
+values[3] = np.ones((1, OUTPUT_LAYER_NEURONS))
 
 weights = np.empty(TOTAL_HIDDEN_LAYERS,dtype=object)
 weights[0] = np.clip(np.random.randn(INPUT_LAYER_NEURONS,HIDDEN_LAYER_1_NEURONS), -1.5, 1.5)
-weights[1] = np.clip(np.random.randn(HIDDEN_LAYER_1_NEURONS,OUTPUT_LAYER_NEURONS), -1.5, 1.5)
+weights[1] = np.clip(np.random.randn(HIDDEN_LAYER_1_NEURONS,HIDDEN_LAYER_2_NEURONS), -1.5, 1.5)
+weights[2] = np.clip(np.random.randn(HIDDEN_LAYER_2_NEURONS,OUTPUT_LAYER_NEURONS), -1.5, 1.5)
 
 wgradients = np.empty(TOTAL_HIDDEN_LAYERS,dtype=object)
 wgradients[0] = np.ones((INPUT_LAYER_NEURONS,HIDDEN_LAYER_1_NEURONS))
@@ -74,8 +77,8 @@ def backProp0(layer):
     wgradients[layer] = np.transpose(np.matmul(values[layer].T, bgradients[layer]))
 
 def backProp(layer): #This also does gradient descent for now
-    bgradients[layer] = np.transpose((bgradients[layer+1].T * weights[layer+1])) * sigmoidDerivative(values[layer+1])
-    wgradients[layer] = np.transpose(np.matmul(values[layer].T, bgradients[layer]))
+    bgradients[layer] = np.matmul(bgradients[layer+1], weights[layer+1].T) * sigmoidDerivative(values[layer+1])
+    wgradients[layer] = np.matmul(values[layer].T, bgradients[layer])
 
 def gradientDescent(layer):
     bias[layer] = bias[layer] - ALPHA * bgradients[layer]
@@ -114,11 +117,13 @@ print("Runtime:", end - start, "seconds")
 
 #Now i just save these errors    
 
-errors = []
 
-# test_inputs = np.array([[[0,0]],[[1,1]],[[1.2,1]],[[0,1]],[[1,1.6]],[[0.6,1]],[[1.59,1]],[[1,0.41]]])
-test_inputs = np.array([[[0.5,1]],[[1,1]],[[1.2,1]],[[0,1]],[[1,1.6]],[[0.6,1]],[[1.59,1]],[[1,0.41]]])
-for i in range(len(test_inputs)):
+np.random.seed(42)
+test_inputs = np.random.rand(100,1,2)
+mae = 0
+TOTAL_TEST_CASES=100
+# test_inputs = np.array([[[0.5,1]],[[1,1]],[[1.2,1]],[[0,1]],[[1,1.6]],[[0.6,1]],[[1.59,1]],[[1,0.41]]])
+for i in range(TOTAL_TEST_CASES):
     #The final four values are on the exact border. This is so fun. I had used < 0.25. SO basically the ones on the borders must come out as one
     #It will be fun to watch these last 4
 
@@ -134,11 +139,11 @@ for i in range(len(test_inputs)):
     # print(output)
     error = output - values[END_LAYER]
 
-    errors.append(error[0][0])
+    mae += abs(error[0][0])
     # print(round(error[0][0],2))
 
 save_results(
-    errors,
+    mae/TOTAL_TEST_CASES,
     ITERATIONS,
     ALPHA,
     HIDDEN_LAYER_1_NEURONS
